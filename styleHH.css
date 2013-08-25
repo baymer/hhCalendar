@@ -1,0 +1,235 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	}
+#head {
+	position: relative;
+	height: 100px;
+	border-bottom: 2px solid #EBEBEB;
+	box-shadow: 0 3px 3px #D6D5D5;
+	background-color: #F4F4F4;
+	}
+#content {
+	margin: 0 30px;
+	}
+#date {
+	height: 40px
+	}
+div.day {
+	float: left;
+	height: 130px;
+	width: 14%;
+	border-top: 1px solid #EBEBEB;
+	border-left: 1px solid #EBEBEB;
+	cursor: pointer;
+	}
+div.day div.dayName,
+div.day div.dayNumber {
+	display: inline;
+	padding: 5px 0 0 5px;
+	font-size: 12px;
+	color: #999999;
+	font-family: sans-serif;
+	}
+div.day.today div.dayName,
+div.day.today div.dayNumber {
+	font-weight: bold;
+	color: black;
+	}
+div.day:hover,
+div.day.eventExists:hover {
+	background-color: #E5F1F9;
+	}
+div.day.eventExists {
+	background-color: #C2E4FE;
+	}
+div.day__last {
+	border-right: 1px solid #EBEBEB;
+	}
+div.day__down {
+	border-bottom: 1px solid #EBEBEB;
+	}
+
+div.day_event {
+	width: 98%;
+	margin-left: 1px;
+	}
+div.day_event:hover {
+	outline: 1px solid #8ABFE9;
+	}
+div.day_event div.eventName,
+div.day_event div.eventContacts {
+	padding: 0 5px;
+	overflow: hidden;
+	font-size: 12px;
+	}
+div.day_event div.eventName {
+	font-weight: bold;
+	}
+#prev,
+#next {
+	width: 20px;
+	height: 20px;
+	border: 1px solid hsl(0, 0%, 84%);
+	border-radius: 3px;
+	cursor: pointer;
+	margin-top: 8px;
+	display: inline-block;
+	}
+#prev span,
+#next span {
+	display: block;
+	-webkit-transform: scaleX(0.5);
+	-moz-transform: scaleX(0.5);
+	-ms-transform: scaleX(0.5);
+	-o-transform: scaleX(0.5);
+	transform: scaleX(0.5);
+	position: relative;
+	}
+#prev span {
+	left: 1px;
+	}
+#next span {
+	left: 2px;
+	}
+#monthNameAndYear {
+	position: relative;
+	top: 3px;
+	display: inline-block;
+	width: 150px;
+	font-family: sans-serif;
+	font-size: 20px;
+	padding: 0 5px;
+	text-align: center;
+	}
+
+#control {
+	position: absolute;
+	bottom: 15px;
+	width: 100%;
+	}
+#control button {
+	width: 100px;
+	height: 30px;
+	margin-right: 5px;
+	background-color: #0271C7;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 15px;
+	/*text-shadow: 1px 1px 2px black;*/
+	color: white;
+	border: 0;
+	border-radius: 1px;
+	box-shadow: 0 1px 1px grey,
+				0 1px 2px grey;
+	cursor: pointer;
+	}
+#control button:first-child {
+	margin-left: 30px;
+	}
+#search {
+	float: right;
+	margin-right: 48px;
+	height: 25px;
+	width: 200px;
+	border-radius: 5px;
+	padding-left: 5px;
+	}
+#control img {
+	float: right;
+	position: relative;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	}
+#form {
+	position: absolute;
+	z-index: 1;
+	left: 261px;
+	width: 300px;
+	height: 400px;
+	padding: 20px;
+	box-shadow: 0 0 4px grey;
+	background-color: white;
+	}
+#form.hidden {
+	top: -1000px;
+	visibility: hidden;
+	}
+#form input,
+#form textarea {
+	padding: 0 10px;
+	width: 100%;
+	display: block;
+	border: 1px solid #B1B1B1;
+	border-radius: 3px;
+	width: 280px;
+	box-shadow: 0px 1px 4px hsla(0, 1%, 63%, 0.7) inset;
+	}
+
+#form form input {
+	height: 30px;
+	margin-bottom: 10px;
+	}
+#form form textarea {
+	height: 200px;
+	margin-top: 40px;
+	padding-top: 5px;
+	}
+#form form button {
+	margin-left: 0;
+	margin-top: 20px;
+	}
+#form div.exit {
+	border: 5px solid white;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	height: 7px;
+	width: 7px;
+	cursor: pointer;
+	background-image: url(close.gif);
+	background-repeat: no-repeat;
+	}
+.triangle {
+	position: absolute;
+	top: 30px;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+}
+.triangle:after {
+	content: "";
+	position: absolute;
+	top: 5px;
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+	box-shadow: 0 0 3px grey;
+}
+
+
+#form.last .triangle {
+	top: 270px
+	}
+#form.nextToLast .triangle {
+	top: 138px
+	}
+#form.left .triangle {
+	left: -30px;
+	}
+#form.left .triangle:after {
+	left: 20px;
+	}
+#form.right .triangle {
+   right: -30px;
+   }
+#form.right .triangle:after {
+   left: -10px;
+   }
