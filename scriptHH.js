@@ -116,9 +116,13 @@ Calendar = function () {
 			that.form.fEvDescriptionEl = that.form.self.querySelector("textarea[name=descriptions]");
 			that.form.fEvDoneEl = that.form.self.querySelector("button[name=done]");
 			that.form.fEvDeleteEl = that.form.self.querySelector("button[name=delete]");
+		that.add = document.getElementById('addButton');
+		that.update = document.getElementById('updateButton');
+		that.searchButton = document.getElementById('searchButton');
+		that.search = document.getElementById('search');
 		that.dateTitleEl = document.getElementById('monthNameAndYear');
 		that.event.store = (window.localStorage && window.localStorage.eventStorage && 
-					JSON.parse(window.localStorage.eventStorage)) || {};
+					JSON.parse(window.localStorage.eventStorage)) || JSON.parse('{"29.6.2013":{"length":2},"22.7.2013":{"length":2,"%D0%94%D0%B5%D0%BD%D1%8C%20%D0%A0%D0%BE%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F!!!":{"contact":"%D0%92%D1%81%D0%B5%20%D0%BC%D0%BE%D0%B8%20%D0%B4%D1%80%D1%83%D0%B7%D1%8C%D1%8F!","description":"%D0%91%D1%83%D0%B4%D0%B5%D0%BC%20%D0%BF%D0%B8%D1%82%D1%8C%20%D0%BA%D0%B2%D0%B0%D1%81%20%D0%B8%20%D0%B2%D1%81%D1%8E%20%D0%BD%D0%BE%D1%87%D1%8C%20%D0%B8%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%D0%B2%20%22Activity%22%3A)%20"}},"3.7.2013":{"length":0},"2.7.2013":{"length":1,"%D0%94%D0%B5%D0%BD%D1%8C%20%D0%92%D0%94%D0%92!":{"contact":"%D0%94%D0%B5%D1%81%D0%B0%D0%BD%D1%82%D1%8B","description":"%D0%97%D0%B0%20%D0%92%D0%94%D0%92!!!"}}}');
 		
 		that.currentDate = new Date();
 		that.drawTitle();
@@ -229,6 +233,50 @@ Calendar = function () {
 			that.event.remove(date, eventName);
 			
 			f.hide();
+		});
+		t.ev.addEvent(that.add, 'click', function (e) {
+			that.form.hide();
+			alert('Click on any day and create an event.');
+		});
+		t.ev.addEvent(that.update, 'click', function (e) {
+			that.form.hide();
+			that.currentDate = new Date();
+			that.drawTitle();
+			that.drawMonth();
+		});
+		t.ev.addEvent(that.searchButton, 'click', function (e) {
+			var searchText = that.search.value,
+				re = new RegExp(encodeURIComponent(searchText)),
+				countResults = 0,
+				resultText;
+			if (searchText === '') {
+				return;
+			}
+			resultText = search(that.event.store);
+			alert("We found " + countResults + " result(s):\n\n" + resultText);
+			function search (store) {
+				var resultText = '',
+					date, 
+					name, 
+					descriptions, 
+					contacts;
+				
+				for (date in store) if (store.hasOwnProperty(date) &&
+										typeof store[date] === 'object') {
+					for (name in store[date]) if (store[date].hasOwnProperty(name) &&
+										name !== 'length') {
+						if (re.test(name) || re.test(store[date][name].contact) ||
+											re.test(store[date][name].description) ) {
+							resultText += "Date: " + date + "\n" +
+								"\tEvent: " + decodeURIComponent(name) + "\n" +
+								"\tContact: " + decodeURIComponent(store[date][name].contact) + "\n" +
+								"\tDescription: " + decodeURIComponent(store[date][name].description) + "\n\n";
+							countResults += 1;
+						}
+					}
+				}
+				return resultText;
+			}
 		});
 	}
 	
