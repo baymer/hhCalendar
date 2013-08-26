@@ -122,8 +122,8 @@ Calendar = function () {
 		that.search = document.getElementById('search');
 		that.dateTitleEl = document.getElementById('monthNameAndYear');
 		that.event.store = (window.localStorage && window.localStorage.eventStorage && 
-					JSON.parse(window.localStorage.eventStorage)) || JSON.parse('{"29.6.2013":{"length":2},"22.7.2013":{"length":2,"%D0%94%D0%B5%D0%BD%D1%8C%20%D0%A0%D0%BE%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F!!!":{"contact":"%D0%92%D1%81%D0%B5%20%D0%BC%D0%BE%D0%B8%20%D0%B4%D1%80%D1%83%D0%B7%D1%8C%D1%8F!","description":"%D0%91%D1%83%D0%B4%D0%B5%D0%BC%20%D0%BF%D0%B8%D1%82%D1%8C%20%D0%BA%D0%B2%D0%B0%D1%81%20%D0%B8%20%D0%B2%D1%81%D1%8E%20%D0%BD%D0%BE%D1%87%D1%8C%20%D0%B8%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%D0%B2%20%22Activity%22%3A)%20"}},"3.7.2013":{"length":0},"2.7.2013":{"length":1,"%D0%94%D0%B5%D0%BD%D1%8C%20%D0%92%D0%94%D0%92!":{"contact":"%D0%94%D0%B5%D1%81%D0%B0%D0%BD%D1%82%D1%8B","description":"%D0%97%D0%B0%20%D0%92%D0%94%D0%92!!!"}}}');
-		
+					JSON.parse(window.localStorage.eventStorage)) || JSON.parse('{"2.7.2013":{"length":1,"День ВДВ!":{"contact":"Десантура!","description":"За ВДВ!"}},"22.7.2013":{"length":1,"Мой день рождения!":{"contact":"Друзья: Никита, Серега, Света и др.","description":"Будем пить чай и играть всю ночь в \\\"Activity\\\"!))"}}}');
+		that.event.updateLocalStorage();
 		that.currentDate = new Date();
 		that.drawTitle();
 		that.drawMonth();
@@ -166,11 +166,11 @@ Calendar = function () {
 			key = d.getDate() + "." + d.getMonth() + "." + d.getFullYear();
 			
 			if (event) {
-				eventName = encodeURIComponent(event.querySelector('div.eventName').innerHTML);
+				eventName = event.querySelector('div.eventName').innerHTML;
 				if (that.event.store[key][eventName]) {
-					f.fEvNameEl.value = decodeURIComponent(eventName);
-					f.fEvContactEl.value = decodeURIComponent(that.event.store[key][eventName].contact);
-					f.fEvDescriptionEl.value = decodeURIComponent(that.event.store[key][eventName].description);
+					f.fEvNameEl.value = eventName;
+					f.fEvContactEl.value = that.event.store[key][eventName].contact;
+					f.fEvDescriptionEl.value = that.event.store[key][eventName].description;
 				}
 				
 			}
@@ -201,9 +201,9 @@ Calendar = function () {
 			e = e || t.ev.fixEvent(e);
 			var f = that.form,
 				date = f.date,
-				eventName = encodeURIComponent(f.fEvNameEl.value),
-				contact = encodeURIComponent(f.fEvContactEl.value),
-				description = encodeURIComponent(f.fEvDescriptionEl.value);
+				eventName = f.fEvNameEl.value,
+				contact = f.fEvContactEl.value,
+				description = f.fEvDescriptionEl.value;
 			
 			t.ev.stopBubbling(e);
 			
@@ -221,7 +221,7 @@ Calendar = function () {
 			e = e || t.ev.fixEvent(e);
 			var f = that.form,
 				date = f.date,
-				eventName = encodeURIComponent(f.fEvNameEl.value);
+				eventName = f.fEvNameEl.value;
 			
 			t.ev.stopBubbling(e);
 			
@@ -246,7 +246,7 @@ Calendar = function () {
 		});
 		t.ev.addEvent(that.searchButton, 'click', function (e) {
 			var searchText = that.search.value,
-				re = new RegExp(encodeURIComponent(searchText)),
+				re = new RegExp(searchText, 'i'),
 				countResults = 0,
 				resultText;
 			if (searchText === '') {
@@ -268,9 +268,9 @@ Calendar = function () {
 						if (re.test(name) || re.test(store[date][name].contact) ||
 											re.test(store[date][name].description) ) {
 							resultText += "Date: " + date + "\n" +
-								"\tEvent: " + decodeURIComponent(name) + "\n" +
-								"\tContact: " + decodeURIComponent(store[date][name].contact) + "\n" +
-								"\tDescription: " + decodeURIComponent(store[date][name].description) + "\n\n";
+								"\tEvent: " + name + "\n" +
+								"\tContact: " + store[date][name].contact + "\n" +
+								"\tDescription: " + store[date][name].description + "\n\n";
 							countResults += 1;
 						}
 					}
@@ -300,13 +300,13 @@ Calendar.prototype = {
 			}
 			if (typeof this.store[key][eventName] === 'undefined') {
 				this.store[key][eventName] = {};
+				this.store[key].length += 1;
 			}
 
 			this.store[key][eventName] = {
 				contact: contact,
 				description: description
 			};
-			this.store[key].length += 1;
 			this.updateLocalStorage();
 		},
 		
@@ -378,8 +378,8 @@ Calendar.prototype = {
 					ev = events[key][prop];
 					eventEl = document.createElement('div');
 					eventEl.className = 'day_event';
-					eventEl.innerHTML = '<div class="eventName">' + decodeURIComponent(prop) + '</div>' +
-										'<div class="eventContacts">' + decodeURIComponent(ev.contact) + '</div>';
+					eventEl.innerHTML = '<div class="eventName">' + prop + '</div>' +
+										'<div class="eventContacts">' + ev.contact + '</div>';
 					parent.appendChild(eventEl);
 					t.changeClass(parent, "", "eventExists");
 				}
